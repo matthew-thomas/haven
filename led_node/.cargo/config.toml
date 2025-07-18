@@ -1,6 +1,10 @@
 [target.'cfg(all(target_arch = "arm", target_os = "none"))']
-# runner = "probe-rs run --chip RP2040 --protocol swd --speed 16000"
-runner = "elf2uf2-rs --deploy --serial --term" #  --verbose
+
+# For debugging
+runner = "probe-rs run --chip RP2040 --protocol swd --speed 16000"
+
+# For running in release mode
+#runner = "elf2uf2-rs --deploy --serial --term" #  --verbose
 
 [build]
 target = "thumbv6m-none-eabi" # Cortex-M0 and Cortex-M0+

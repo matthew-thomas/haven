@@ -3,7 +3,6 @@
 
 mod artnet;
 mod pixel_control;
-
 use core::format_args as f;
 use defmt_serial as _;
 use embassy_executor::Spawner;
@@ -25,7 +24,7 @@ use smart_leds::RGB8;
 use static_cell::StaticCell;
 
 // CONFIG
-const PIXEL_COUNT: usize = 170;
+const PIXEL_COUNT: usize = 8;
 const IP_ADDRESS_SECOND_TO_LAST_NUMBER: u8 = 5;
 const IP_ADDRESS_LAST_NUMBER: u8 = 51;
 // 169.254.9.91-99
@@ -123,6 +122,34 @@ async fn main(spawner: Spawner) {
         p.PIN_6,
         &program,
     );
+    // let mut strip0: PioWs2812<'_, _, 0, PIXEL_COUNT> = PioWs2812::new(
+    //     &mut pio_neopixel_0.common,
+    //     pio_neopixel_0.sm0,
+    //     p.DMA_CH4,
+    //     p.PIN_6,
+    //     &program,
+    // );
+    // let mut strip1: PioWs2812<'_, _, 0, PIXEL_COUNT> = PioWs2812::new(
+    //     &mut pio_neopixel_0.common,
+    //     pio_neopixel_0.sm1,
+    //     p.DMA_CH5,
+    //     p.PIN_7,
+    //     &program,
+    // );
+    // let mut strip2: PioWs2812<'_, _, 0, PIXEL_COUNT> = PioWs2812::new(
+    //     &mut pio_neopixel_0.common,
+    //     pio_neopixel_0.sm2,
+    //     p.DMA_CH6,
+    //     p.PIN_8,
+    //     &program,
+    // );
+    // let mut strip3: PioWs2812<'_, _, 0, PIXEL_COUNT> = PioWs2812::new(
+    //     &mut pio_neopixel_0.common,
+    //     pio_neopixel_0.sm3,
+    //     p.DMA_CH7,
+    //     p.PIN_9,
+    //     &program,
+    // );
 
     let mut pixels = [RGB8::default(); PIXEL_COUNT];
     for i in &mut pixels {
@@ -177,6 +204,7 @@ async fn main(spawner: Spawner) {
         dns_servers: heapless::Vec::new(),
         gateway: None,
     });
+
     // let dhcp_net_config = NetConfig::dhcpv4(Default::default());
     static STACK_RESOURCES: StaticCell<StackResources<3>> = StaticCell::new();
     let seed = 0xafd4_37bc_79fd_c225;
@@ -209,8 +237,8 @@ async fn main(spawner: Spawner) {
     s.println(f!("connected!"));
 
     for i in &mut pixels {
-        i.r = 0;
-        i.g = 64;
+        i.r = 255;
+        i.g = 255;
         i.b = 255;
     }
     pc.write(&pixels).await;
